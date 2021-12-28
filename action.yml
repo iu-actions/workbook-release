@@ -4,13 +4,13 @@ description: Release your IU Workbook with GitHub Actions.
 inputs:
   # student details
   first_name:
-    description: The first name of the student
+    description: The first name of the publishing student
     required: true
   last_name:
-    description: The last name of the student
+    description: The last name of the publishing student
     required: true
   id:
-    description: The id of the student
+    description: The id of the publishing student
     required: true
   
   # course details
