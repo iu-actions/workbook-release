@@ -37,6 +37,7 @@ runs:
         date=$(date +"%Y%m%d)  # Create the date in the form YYYYMMDD
         filename=$(echo "$date_${{ inputs.last_name }}_${{ inputs.first_name }}_${{ inputs.id }}_${{ inputs.course_id }}.pdf" | konwert UTF8-ascii/de)"
         echo "::set-output name=filename::$filename"
+      shell: bash
     - name: Download Merged PDF File from GitHub Artifacts.
       uses: actions/download-artifact@v2
       with:
@@ -59,6 +60,7 @@ runs:
       shell: bash
     - name: Export Metadata of Turnitin File
       run: exiftool -htmlFormat ${{ steps.config.outputs.filename }} > metadata.html
+      shell: bash
     - name: Cleanup Prior Releases
       uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
