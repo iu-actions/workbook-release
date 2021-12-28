@@ -1,0 +1,75 @@
+name: IU Workbook Release
+description: Release your IU Workbook with GitHub Actions.
+
+inputs:
+  # student details
+  first_name:
+    description: The first name of the student
+    required: true
+  last_name:
+    description: The last name of the student
+    required: true
+  id:
+    description: The id of the student
+    required: true
+  
+  # course details
+  course_name:
+    description: The name of the course
+    required: true
+  course_id:
+    description: The id of the course
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: |
+        sudo apt-get install konwert -y  # Convert between different character encodings
+        sudo apt-get install libimage-exiftool-perl -y  # Alter document metadata
+      shell: bash
+    - name: Create Configuration
+      id: config
+      run: |
+        date=$(date +"%Y%m%d)  # Create the date in the form YYYYMMDD
+        filename=$(echo "$date_${{ inputs.last_name }}_${{ inputs.first_name }}_${{ inputs.id }}_${{ inputs.course_id }}.pdf" | konwert UTF8-ascii/de)"
+        echo "::set-output name=filename::$filename"
+    - name: Download Merged PDF File from GitHub Artifacts.
+      uses: actions/download-artifact@v2
+      with:
+        name: merge
+    - name: Alter Metadata of Merged PDF File.
+      run: >
+        exiftool
+        -Title="Workbook"
+        -Author="${{ inputs.first_name }} ${{ inputs.last_name }}"
+        -Copyright="© $(date +%Y) ${{ inputs.first_name }} ${{ inputs.last_name }}, All rights reserved."
+        -Subject="Workbook zum Kurs ${{ inputs.course_name }}"
+        -Keywords="${{ inputs.course_name }}, ${{ inputs.course_id }}"
+        -Software="Microsoft® Word 2013"
+        -Producer="Microsoft® Word 2013"
+        -Creator="Microsoft® Word 2013"
+        merge.pdf
+      shell: bash
+    - name: Create Turnitin Filename of Merged PDF File.
+      run: mv merge.pdf ${{ steps.config.outputs.filename }}
+      shell: bash
+    - name: Export Metadata of Turnitin File
+      run: exiftool -htmlFormat ${{ steps.config.outputs.filename }} > metadata.html
+    - name: Cleanup Prior Releases
+      uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          keep_latest: 0
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+     - name: Release Workbook
+       uses: ncipollo/release-action@v1
+        with:
+          tag: Dokumente
+          artifacts: "${{ steps.config.outputs.filename }},metadata.html"
+          token: ${{ github.token }}
+          commit: main
