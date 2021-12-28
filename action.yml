@@ -70,7 +70,7 @@ runs:
     - name: Release Workbook
       uses: ncipollo/release-action@v1
       with:
-        tag: Dokumente
+        tag: workbook
         artifacts: "${{ steps.config.outputs.filename }},metadata.html"
         token: ${{ github.token }}
         commit: main
