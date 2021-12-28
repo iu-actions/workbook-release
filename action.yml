@@ -68,8 +68,8 @@ runs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
-     - name: Release Workbook
-       uses: ncipollo/release-action@v1
+    - name: Release Workbook
+      uses: ncipollo/release-action@v1
         with:
           tag: Dokumente
           artifacts: "${{ steps.config.outputs.filename }},metadata.html"
