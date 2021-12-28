@@ -68,7 +68,7 @@ jobs:
       - name: Merge (Cover, Content)
         uses: iu-actions/workbook-merge@main
   release:
-    needs: [merge]
+    needs: merge
     runs-on: ubuntu-latest
     steps:
       - name: Release Workbook
