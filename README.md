@@ -15,9 +15,9 @@ This action requires the presence of inputs, which are listed below.
 > **Note**: This action is dependent on the [iu-actions/workbook-cover](https://github.com/iu-actions/workbook-cover), [iu-actions/workbook-content](https://github.com/iu-actions/workbook-content) and [iu-actions/workbook-merge](https://github.com/iu-actions/workbook-merge) actions.
 
 ### Inputs
-- `first_name`: The first name of the student. (**required**)
-- `last_name`: The last name of the student. (**required**)
-- `id`: The id of the student. (**required**)
+- `first_name`: The first name of the publishing student. (**required**)
+- `last_name`: The last name of the publishing student. (**required**)
+- `id`: The id of the publishing student. (**required**)
 
 - `course_name`: The name of the course. (**required**)
 - `course_id`: The id/number of the course. (**required**)
