@@ -33,16 +33,16 @@ runs:
       shell: bash
     - name: Create Configuration
       id: config
-      run: |
+      run: | 
         date=$(date +"%Y%m%d)  # Create the date in the form YYYYMMDD
-        filename=$(echo "$date_${{ inputs.last_name }}_${{ inputs.first_name }}_${{ inputs.id }}_${{ inputs.course_id }}.pdf" | konwert UTF8-ascii/de)"
+        filename=$(echo "$date_${{ inputs.last_name }}_${{ inputs.first_name }}_${{ inputs.id }}_${{ inputs.course_id }}.pdf" | konwert UTF8-ascii/de)
         echo "::set-output name=filename::$filename"
       shell: bash
-    - name: Download Merged PDF File from GitHub Artifacts.
+    - name: Download Merged PDF File from GitHub Artifacts
       uses: actions/download-artifact@v2
       with:
         name: merge
-    - name: Alter Metadata of Merged PDF File.
+    - name: Alter Metadata of Merged PDF File
       run: >
         exiftool
         -Title="Workbook"
@@ -55,7 +55,7 @@ runs:
         -Creator="Microsoft® Word 2013"
         merge.pdf
       shell: bash
-    - name: Create Turnitin Filename of Merged PDF File.
+    - name: Create Turnitin Filename of Merged PDF File
       run: mv merge.pdf ${{ steps.config.outputs.filename }}
       shell: bash
     - name: Export Metadata of Turnitin File
@@ -63,15 +63,15 @@ runs:
       shell: bash
     - name: Cleanup Prior Releases
       uses: dev-drprasad/delete-older-releases@v0.2.0
-        with:
-          keep_latest: 0
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      with:
+        keep_latest: 0
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
     - name: Release Workbook
       uses: ncipollo/release-action@v1
-        with:
-          tag: Dokumente
-          artifacts: "${{ steps.config.outputs.filename }},metadata.html"
-          token: ${{ github.token }}
-          commit: main
+      with:
+        tag: Dokumente
+        artifacts: "${{ steps.config.outputs.filename }},metadata.html"
+        token: ${{ github.token }}
+        commit: main
