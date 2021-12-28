@@ -34,7 +34,7 @@ runs:
     - name: Create Configuration
       id: config
       run: | 
-        date=$(date +"%Y%m%d)  # Create the date in the form YYYYMMDD
+        date=$(date +"%Y%m%d")  # Create the date in the form YYYYMMDD
         filename=$(echo "$date_${{ inputs.last_name }}_${{ inputs.first_name }}_${{ inputs.id }}_${{ inputs.course_id }}.pdf" | konwert UTF8-ascii/de)
         echo "::set-output name=filename::$filename"
       shell: bash
